@@ -58,7 +58,7 @@ Chessboard camera calibration results was saved. And I used it to undistort the 
 
 I used a combination of color and gradient thresholds to generate a binary image. I have tried Gradient Threshold, Magnitude of Threshold, Direction of Gradient and combination of all three. Output of each of this function is avialable in 8th code cell, 10th code cell, 12th code cell and 14th code cell respectively. 
 
-For color transfor I have extracted S-Channel from HLS. Output of S-Channel is displayed in 16th code cell. 
+For color transform I have extracted S-Channel from HLS. Output of S-Channel is displayed in 16th code cell. 
 
 In my final piple line I used combined binrary of L-Channel, S-Channel and Gradient Threshold.
 
@@ -68,8 +68,8 @@ The code for my perspective transform includes a function called `corners_unwarp
 
 ```python
 src = np.float32([[590,450],[700,450],[1135,680],[225,680]])
-    offset = 100 # offset for dst points
-    dst = np.float32([[offset, 0], [img_size[0]-offset, 0], 
+offset = 100 # offset for dst points
+dst = np.float32([[offset, 0], [img_size[0]-offset, 0], 
                       [img_size[0]-offset, img_size[1]], 
                       [offset, img_size[1]]])
 ```
@@ -87,19 +87,27 @@ I verified that my perspective transform was working as expected by drawing the 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+First take a histogram along all the columns in the lower half of the image to find the peaks like below.
 
-![alt text][image5]
+histogram = np.sum(binary_warped[binary_warped.shape[0]/2:,:], axis=0)
+
+Then use peak as starting position and use sliding window search to find lane-line pixels and fit with polynomial. Output of this is available in output_images/sliding_window folder.
+
+Once you know where the lines are skip the sliding window step. Instead just search in a margin around the previous line position. Output of this function is avialable in output_images/prev_sliding_window folder.
+
+For processing the video, Line class is defined to hold interesting paramaters. Everytime, good fit is found it is added to the bestfit. Processing of the image happens using avarage of 5 best fits. If good fit is not found then do the sliding window search again. 
+
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+I did this in code cell 27. First it defines conversions in x and y from pixels space to meters. For this project, the lane is assumed to be about 30 meters long and 3.7 meters wide. After this it finds left and right lane curvature using forumla given for the Radius of curvature. 
+
+http://www.intmath.com/applications-differentiation/8-radius-curvature.php
+
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
-
-![alt text][image6]
+I implemented this step in code cell 28,29 and 30 in function 'draw_lane' and 'draw_curvature'. Output of this is displayed in code cell 30 and code cell 33.
 
 ---
 
@@ -107,7 +115,7 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./project_video_output.mp4)
 
 ---
 
@@ -115,4 +123,9 @@ Here's a [link to my video result](./project_video.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+I have exprimented with different thresholds and color transform to form my final piple line as described in point 2 above. Finally, I used combined binrary of L-Channel, S-Channel and Gradient Threshold.
+
+Biggest problem I faced in this project while using sliding window search. Also, I am comparatively still new to Python. So this creates problem while using complex python functions. 
+
+pipleline is failing when there is a line (not actual lane but some color difference) between the lane as given in challenge_video.mp4. This is where pipleline struggles to find actual lane since it is probably evaluting lane lines mistakely because of color difference within lane. To correct this I believe I should play around more with different channels and thresolds to form more robust pipeline. 
+
