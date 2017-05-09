@@ -64,7 +64,7 @@ In my final piple line I used combined binrary of L-Channel, S-Channel and Gradi
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `corners_unwarp()`, which appears in 17th code cell of the IPython notebook).  The `corners_unwarp()` function takes as inputs an image (`img`). I chose the hardcode the source and destination points in the following manner:
+The code for my perspective transform includes a function called `corners_unwarp()`, which appears in 17th code cell of the IPython notebook).  The `corners_unwarp()` function takes as inputs an image (`img`). I chose to hardcode the source and destination points in the following manner:
 
 ```python
 src = np.float32([[590,450],[700,450],[1135,680],[225,680]])
@@ -115,7 +115,7 @@ I implemented this step in code cell 28,29 and 30 in function 'draw_lane' and 'd
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video_output.mp4)
+Here's a [link to my video result](project_video_output.mp4)
 
 ---
 
@@ -123,7 +123,7 @@ Here's a [link to my video result](./project_video_output.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-I have exprimented with different thresholds and color transform to form my final piple line as described in point 2 above. Finally, I used combined binrary of L-Channel, S-Channel and Gradient Threshold.
+I have experimented with different thresholds and color transform to form my final piple line as described in point 2 above. Finally, I used combined binrary of L-Channel, S-Channel and Gradient Threshold.
 
 Biggest problem I faced in this project while using sliding window search. Also, I am comparatively still new to Python. So this creates problem while using complex python functions. 
 
